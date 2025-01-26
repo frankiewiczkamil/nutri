@@ -1,10 +1,11 @@
-import { Ingredient, NutrientsItem } from "../domain/NutrientsItem.ts";
-import { Nutrients } from "../domain/Nutrients.ts";
+import { Ingredient, NutrientsItem } from '../domain/NutrientsItem.ts';
+import { Nutrients } from '../domain/Nutrients.ts';
 
 export function generateFakeItem(description: string): NutrientsItem {
-  const id = Math.random().toString();
+  const id = crypto.randomUUID();
   return {
     id,
+    timestamp: Date.now(),
     description,
     nutrients: [generateFakeIngredient(`${description.substring(0, 15)}`)],
   };
