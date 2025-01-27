@@ -2,10 +2,10 @@ import './App.css';
 import { DailyNutrients } from './features/DailyNutrients.tsx';
 import { AddItem } from './features/AddItem.tsx';
 import { useEffect, useState } from 'react';
-import { generateFakeItem } from './features/fakeItems.ts';
 import { getMidnightTimestamp } from './util/date.ts';
 import { addItem, readItemsByDay } from './infra/storage/store.ts';
 import { NutrientsItem } from './domain/NutrientsItem.ts';
+import { ask } from './infra/ai/groq.ts';
 
 export type State = 'initializing' | 'loading' | 'loaded' | 'error';
 
@@ -14,8 +14,15 @@ function App() {
   const [items, setItems] = useState<NutrientsItem[]>([]);
   const [state, setState] = useState<State>('initializing');
 
-  function add(desc: string) {
-    const newItem = generateFakeItem(desc);
+  async function add(description: string) {
+    const newItem = {
+      id: crypto.randomUUID(),
+      timestamp: Date.now(),
+      description,
+      nutrients: await ask(description),
+    };
+    console.log(newItem);
+    // const newItem = generateFakeItem(desc);
     addItem(newItem);
     setItems([newItem, ...items]);
   }
