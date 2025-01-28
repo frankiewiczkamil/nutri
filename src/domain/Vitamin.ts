@@ -1,20 +1,6 @@
-import { Unit, UNIT } from "./Unit.ts";
+import { Unit, UNIT } from './Unit.ts';
 
-export type Vitamin =
-  | "A"
-  | "B1"
-  | "B2"
-  | "B3"
-  | "B5"
-  | "B6"
-  | "B7"
-  | "B9"
-  | "B11"
-  | "B12"
-  | "C"
-  | "D"
-  | "E"
-  | "K";
+export type Vitamin = 'A' | 'B1' | 'B2' | 'B3' | 'B5' | 'B6' | 'B7' | 'B9' | 'B11' | 'B12' | 'C' | 'D' | 'E' | 'K';
 
 const { mikrogram, miligram } = UNIT;
 
@@ -34,3 +20,5 @@ export const vitaminUnits: Record<Vitamin, Unit> = {
   E: miligram,
   K: mikrogram,
 } as const;
+
+export const Vitamins = Object.keys(vitaminUnits) as Vitamin[];

@@ -8,3 +8,12 @@ export const UNIT = {
 } as const;
 
 export type Unit = (typeof UNIT)[keyof typeof UNIT];
+
+export const unitLabels: Record<Unit, string> = {
+  [UNIT.kilogram]: 'kg',
+  [UNIT.gram]: 'g',
+  [UNIT.miligram]: 'mg',
+  [UNIT.mikrogram]: 'µg',
+  [UNIT.nanogram]: 'ng',
+  [UNIT.picogram]: 'pg',
+};

@@ -1,24 +1,24 @@
-import { Unit, UNIT } from "./Unit.ts";
+import { Unit, UNIT } from './Unit.ts';
 
 export type Mineral =
-  | "arsenic"
-  | "cadmium"
-  | "calcium"
-  | "chloride"
-  | "chromium"
-  | "copper"
-  | "iodine"
-  | "iron"
-  | "lead"
-  | "magnesium"
-  | "manganese"
-  | "mercury"
-  | "molybdenum"
-  | "phosphorus"
-  | "potassium"
-  | "selenium"
-  | "sodium"
-  | "zinc";
+  | 'arsenic'
+  | 'cadmium'
+  | 'calcium'
+  | 'chloride'
+  | 'chromium'
+  | 'copper'
+  | 'iodine'
+  | 'iron'
+  | 'lead'
+  | 'magnesium'
+  | 'manganese'
+  | 'mercury'
+  | 'molybdenum'
+  | 'phosphorus'
+  | 'potassium'
+  | 'selenium'
+  | 'sodium'
+  | 'zinc';
 
 const { mikrogram, miligram, nanogram } = UNIT;
 
@@ -42,3 +42,5 @@ export const mineralUnits: Record<Mineral, Unit> = {
   arsenic: nanogram,
   cadmium: nanogram,
 };
+
+export const Minerals = Object.keys(mineralUnits) as Mineral[];
