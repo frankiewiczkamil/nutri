@@ -2,15 +2,18 @@ import { Ingredient } from '../domain/NutrientsItem.ts';
 import { Mineral, Minerals } from '../domain/Mineral.ts';
 import { Vitamin, Vitamins } from '../domain/Vitamin.ts';
 import { Row } from './Row.tsx';
+import { Macroelement } from '../domain/Macro.ts';
 
 type Props = {
   ingredients: Ingredient[];
   minerals: Mineral[];
+  vitamins: Vitamin[];
+  macroelements: Macroelement[];
 };
 
-export function Summary({ ingredients, minerals }: Readonly<Props>) {
+export function Summary({ ingredients, minerals, macroelements, vitamins }: Readonly<Props>) {
   const summary = sum(ingredients);
-  return <Row ingredient={summary} minerals={minerals} />;
+  return <Row ingredient={summary} selectedMinerals={minerals} selectedMacroelements={macroelements} selectedVitamins={vitamins} />;
 }
 
 const initial = () => ({
