@@ -3,11 +3,9 @@ import { getGroqApiKey, setGroqApiKey } from '../../infra/ai/groq.ts';
 import { invisible } from '../../assets/icons/invisible.tsx';
 import { visible } from '../../assets/icons/visible.tsx';
 
-type Props = {
-  close: () => void;
-};
+type Props = {};
 
-export function AiSettings({ close }: Readonly<Props>) {
+export function AiSettings({}: Readonly<Props>) {
   const [groqKey, setGroqKey] = useState(getGroqApiKey() || '');
   const [groqKeyVisible, setGroqKeyVisible] = useState(false);
 
@@ -40,9 +38,6 @@ export function AiSettings({ close }: Readonly<Props>) {
           {groqKeyVisible ? invisible : visible}
         </button>
       </div>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 self-end" onClick={close}>
-        Ok
-      </button>
     </div>
   );
 }

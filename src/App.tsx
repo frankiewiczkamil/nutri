@@ -21,8 +21,10 @@ import {
 import { NutriPicker } from './features/nutri-picker.tsx';
 import { AiSettings } from './features/ai-provider/AiSettings.tsx';
 import { settings } from './assets/icons/settings.tsx';
+import { tune } from './assets/icons/tune.tsx';
 
 export type State = 'initializing' | 'loading' | 'loaded' | 'error';
+export type Osd = 'tune' | 'settings' | 'none';
 
 function App() {
   const [day, setDay] = useState(getMidnightTimestamp(Date.now()));
@@ -32,8 +34,7 @@ function App() {
   const [selectedVitamins, setSelectedVitamins] = useState<Vitamin[]>(getSelectedVitamins() || ['C', 'B12']);
   const [selectedMinerals, setSelectedMinerals] = useState<Mineral[]>(getSelectedMinerals() || ['potassium', 'sodium', 'magnesium']);
   const [selectedMacroelements, setSelectedMacroelements] = useState<Macroelement[]>(getSelectedMacroelements() || ['fat']);
-  const [showAiSettings, setShowAiSettings] = useState(!getGroqApiKey());
-
+  const [osd, setOsd] = useState<Osd>(!getGroqApiKey() ? 'settings' : 'none');
   async function add(description: string) {
     const newItem = {
       id: crypto.randomUUID(),
@@ -86,17 +87,16 @@ function App() {
     <>
       <nav className="bg-black text-white flex justify-between">
         <DayPicker daysMetadata={daysMetadata} pickDay={pickDay} selectedDay={day} />
-        <button className="pr-1" onClick={() => setShowAiSettings(!showAiSettings)}>
-          {settings}
-        </button>
-      </nav>
-      {showAiSettings && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div className="bg-white p-3 shadow-lg max-w-lg w-full">
-            <AiSettings close={() => setShowAiSettings(false)} />
-          </div>
+        <div className="flex align-bottom">
+          <button className="pr-1" onClick={() => setOsd('tune')}>
+            {tune}
+          </button>
+          <button className="pr-1" onClick={() => setOsd('settings')}>
+            {settings}
+          </button>
         </div>
-      )}
+      </nav>
+
       <main className="p-2">
         <AddItem add={add} />
         {state !== 'initializing' && (
@@ -108,16 +108,33 @@ function App() {
             selectedMacroelements={selectedMacroelements}
           />
         )}
-        <div className="pt-5">
-          <NutriPicker
-            selectedMacroelements={selectedMacroelements}
-            selectedMinerals={selectedMinerals}
-            selectedVitamins={selectedVitamins}
-            toggleMacroelement={toggleMacroelement}
-            toggleMineral={toggleMineral}
-            toggleVitamin={toggleVitamin}
-          />
-        </div>
+        {osd === 'settings' && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+            <div className="bg-white p-3 shadow-lg max-w-lg w-full flex flex-col space-y-4">
+              <AiSettings />
+              <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 self-end" onClick={() => setOsd('none')}>
+                Ok
+              </button>
+            </div>
+          </div>
+        )}
+        {osd === 'tune' && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+            <div className="bg-white p-3 shadow-lg max-w-lg w-full flex flex-col">
+              <NutriPicker
+                selectedMacroelements={selectedMacroelements}
+                selectedMinerals={selectedMinerals}
+                selectedVitamins={selectedVitamins}
+                toggleMacroelement={toggleMacroelement}
+                toggleMineral={toggleMineral}
+                toggleVitamin={toggleVitamin}
+              />
+              <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 self-end" onClick={() => setOsd('none')}>
+                Ok
+              </button>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
