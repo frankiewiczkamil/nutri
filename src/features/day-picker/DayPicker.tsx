@@ -8,7 +8,7 @@ type Props = {
 
 export function DayPicker({ daysMetadata, pickDay, selectedDay }: Readonly<Props>) {
   return (
-    <div className="flex bg-black text-white overflow-auto">
+    <div className="flex  overflow-auto">
       {Object.keys(daysMetadata)
         .sort((a, b) => b.localeCompare(a))
         .map((day) => (

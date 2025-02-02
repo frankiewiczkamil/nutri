@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { getMidnightTimestamp } from './util/date.ts';
 import { addItem, getPastDaysMetadata, readItemsByDay } from './infra/storage/store.ts';
 import { NutrientsItem } from './domain/NutrientsItem.ts';
-import { ask } from './infra/ai/groq.ts';
+import { ask, getGroqApiKey } from './infra/ai/groq.ts';
 import { DayPicker } from './features/day-picker/DayPicker.tsx';
 import { Vitamin } from './domain/Vitamin.ts';
 import { Mineral } from './domain/Mineral.ts';
@@ -19,6 +19,8 @@ import {
   updateSelectedVitamins,
 } from './infra/storage/settings.ts';
 import { NutriPicker } from './features/nutri-picker.tsx';
+import { AiSettings } from './features/ai-provider/AiSettings.tsx';
+import { settings } from './assets/icons/settings.tsx';
 
 export type State = 'initializing' | 'loading' | 'loaded' | 'error';
 
@@ -30,6 +32,7 @@ function App() {
   const [selectedVitamins, setSelectedVitamins] = useState<Vitamin[]>(getSelectedVitamins() || ['C', 'B12']);
   const [selectedMinerals, setSelectedMinerals] = useState<Mineral[]>(getSelectedMinerals() || ['potassium', 'sodium', 'magnesium']);
   const [selectedMacroelements, setSelectedMacroelements] = useState<Macroelement[]>(getSelectedMacroelements() || ['fat']);
+  const [showAiSettings, setShowAiSettings] = useState(!getGroqApiKey());
 
   async function add(description: string) {
     const newItem = {
@@ -38,7 +41,6 @@ function App() {
       description,
       nutrients: await ask(description),
     };
-    console.log(newItem);
     // const newItem = generateFakeItem(desc);
     addItem(newItem);
     setItems([newItem, ...items]);
@@ -82,9 +84,19 @@ function App() {
 
   return (
     <>
-      <nav>
+      <nav className="bg-black text-white flex justify-between">
         <DayPicker daysMetadata={daysMetadata} pickDay={pickDay} selectedDay={day} />
+        <button className="pr-1" onClick={() => setShowAiSettings(!showAiSettings)}>
+          {settings}
+        </button>
       </nav>
+      {showAiSettings && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+          <div className="bg-white p-3 shadow-lg max-w-lg w-full">
+            <AiSettings close={() => setShowAiSettings(false)} />
+          </div>
+        </div>
+      )}
       <main className="p-2">
         <AddItem add={add} />
         {state !== 'initializing' && (
@@ -116,7 +128,6 @@ function getDaysMetadata(today: number) {
   if (daysMetadata[today] === undefined) {
     daysMetadata[today] = 0;
   }
-  console.log(daysMetadata);
   return daysMetadata;
 }
 export default App;

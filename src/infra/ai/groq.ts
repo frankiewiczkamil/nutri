@@ -1,12 +1,20 @@
 import { createPromptText } from './prompt.ts';
 
-const GROQ_API_KEY = localStorage.GROQ_API_KEY;
+let GROQ_API_KEY = localStorage.GROQ_API_KEY;
+
+export function getGroqApiKey() {
+  return GROQ_API_KEY;
+}
+export function setGroqApiKey(apiKey: string) {
+  GROQ_API_KEY = apiKey;
+  localStorage.GROQ_API_KEY = apiKey;
+}
 
 export function ask(description: string) {
   return fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${GROQ_API_KEY}`,
+      Authorization: `Bearer ${getGroqApiKey()}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({

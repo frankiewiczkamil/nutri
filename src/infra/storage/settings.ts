@@ -34,7 +34,6 @@ export function getSelectedMacroelements(): Macroelement[] | null {
 }
 
 export function updateSelectedVitamins(vitamins: Vitamin[]) {
-  console.log('vitamins', vitamins);
   localStorage.setItem(SELECTED_VITAMINS_KEY, JSON.stringify(vitamins));
 }
 
